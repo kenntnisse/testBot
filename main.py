@@ -3,6 +3,7 @@ from discord.ext import commands
 import logging
 from dotenv import load_dotenv
 import os
+import webserver 
 
 load_dotenv()
 
@@ -40,4 +41,6 @@ async def on_message(message):
 async def hello(ctx):
     await ctx.send(f"Hello {ctx.author.mention}!")
 
+
+webserver.keep_alive()
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
