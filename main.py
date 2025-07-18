@@ -4,6 +4,7 @@ import logging
 from dotenv import load_dotenv
 import os
 import webserver 
+from datetime import datetime
 
 load_dotenv()
 
@@ -31,6 +32,10 @@ async def on_message(message):
     if message.author == bot.user:
         return
     
+    if datetime.today().strftime('%m-%d') == "07-20":
+        await message.channel.send(f"Thanks! {message.author}")
+
+
     if "shunzo" in message.content.lower():
         await message.delete()
         await message.channel.send(f"{message.author.mention} counted")
