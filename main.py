@@ -13,7 +13,7 @@ bday = os.getenv('BDAY')
 secret = os.getenv('SECRET')
 directory = ast.literal_eval(os.getenv('DIRECTORY'))
 available = os.getenv('AVAILABLE') == True
-owner = int(os.getenv('OWNER'))
+owner = ast.literal_eval(os.getenv('OWNER'))
 
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
