@@ -18,6 +18,7 @@ secret = os.getenv('SECRET')
 directory = ast.literal_eval(os.getenv('DIRECTORY'))
 available = os.getenv('AVAILABLE') == True
 owner = ast.literal_eval(os.getenv('OWNER'))
+trigger = ast.literal_eval(os.getenv('TRIGGER'))
 
 
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
@@ -33,6 +34,7 @@ bot = commands.Bot(command_prefix='/', intents = intents)
 pings = []
 
 
+
 @bot.event
 async def on_ready():
     print(f"on_ready called {bot.user.name}")
@@ -46,9 +48,30 @@ async def on_message(message):
     reply = ""
     for m in message.mentions:
         if m.id == owner:
-            pings.append(message.created_at)
             if not available:
-                reply += "I don't think he's available right now."
+                unavailable = "I don't think he's available right now. "
+                if (random.randint(0, 2) == 1):
+                    unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
+                else:
+                    unavailable = "Shunzo's not here right now. "
+                
+                if len(pings) == 0:
+                    reply += unavailable
+                elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
+                    reply += unavailable
+            pings.append(message.created_at)
+            i = 0
+            while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
+                i += 1
+            pings = pings[i:]
+            if len(pings) == 3:
+                await message.channel.send("Spam identifier activated...")
+            elif len(pings) == 6:
+                await message.channel.send("Hey, that's spam, right? Stop that.")
+            elif len(pings) == 10:
+                await message.channel.send("Quit it.")
+            elif len(pings) == 50:
+                await message.channel.send("Ok, that's impressive.")
             break
 
 
@@ -67,13 +90,23 @@ async def on_message(message):
             else:
                 choice = random.randint(0,1)
                 if choice == 0:
-                    reply += "I'm sure he's grateful though."
+                    reply += "But, I'm sure he's grateful though."
                 elif choice == 1:
-                    reply += "I'll pass it on. Thanks!"
+                    reply += "I'll pass it on anyway. Thanks!"
     
+    if trigger.lower() in message.content.lower():
+        choice = random.randint(0,99)
+        if choice == 99:
+            await message.channel.send(f"I'll be seeing you soon... {directory[message.author.id]}")
+        elif choice < 50:
+            await message.channel.send(f"awww I missed you too, {directory[message.author.id]}")
+        else:
+            await message.channel.send("<3")
+
+
     if secret in message.content.lower():
         await message.delete()
-        await message.channel.send(f"{message.author.mention} counted?")
+        await message.channel.send(f"{message.author.mention} counted!")
 
 
     await message.channel.send(reply)
