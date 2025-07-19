@@ -64,12 +64,12 @@ async def on_message(message):
                 #        await message.channel.send("last ping more than 5 minutes ago")
             await message.channel.send("???????")
             pings.append(message.created_at)
-            await message.channel.send("ping added" + str(pings))
+            await message.channel.send("ping added" + str(pings[0]))
             i = 0
             while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                 i += 1
             pings = pings[i:]
-            message.channel.send(str(pings))
+            message.channel.send(str(pings[0]))
             if len(pings) == 3:
                 await message.channel.send("Spam identifier activated...")
             elif len(pings) == 6:
