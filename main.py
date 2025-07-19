@@ -49,7 +49,6 @@ async def on_message(message):
     for m in message.mentions:
         if m.id == owner:
             if not available:
-                await message.channel.send("owner contacted")
                 unavailable = "I don't think he's available right now. "
                 if (random.randint(0, 2) == 1):
                     unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
@@ -58,13 +57,17 @@ async def on_message(message):
                 
                 if len(pings) == 0:
                     reply += unavailable
+                    await message.channel.send("pings 0")
                 elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
                     reply += unavailable
+                    await message.channel.send("last ping more than 5 minutes ago")
             pings.append(message.created_at)
+            await message.channel.send("ping added" + str(pings))
             i = 0
             while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                 i += 1
             pings = pings[i:]
+            message.channel.send(str(pings))
             if len(pings) == 3:
                 await message.channel.send("Spam identifier activated...")
             elif len(pings) == 6:
