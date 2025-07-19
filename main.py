@@ -56,8 +56,8 @@ async def on_message(message):
     date = date.astimezone(timezone('US/Pacific'))
     if date.strftime('%m-%d') == bday:
         await message.channel.send("counted")
-        if "happy birthday" in message.content.lower() or "hbd" in message.content.lower:
-            #await message.add_reaction('❤️')
+        if "happy birthday" in message.content.lower() or "hbd" in message.content.lower():
+            await message.add_reaction('❤️')
             if reply == "":
                 choice = random.randint(0,1)
                 if choice == 0:
