@@ -48,6 +48,7 @@ async def on_message(message):
     reply = ""
     for m in message.mentions:
         if m.id == owner:
+            await message.channel.send("owner contacted")
             if not available:
                 unavailable = "I don't think he's available right now. "
                 if (random.randint(0, 2) == 1):
