@@ -36,7 +36,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     
-    if datetime.today().strftime('%m-%d') == bday:
+    if datetime.now().strftime('%m-%d') == bday:
         await message.channel.send(f"Thanks! {directory[message.author.id]}")
 
     if secret in message.content.lower():
