@@ -55,6 +55,7 @@ async def on_message(message):
     date = datetime.datetime.now(tz=utc)
     date = date.astimezone(timezone('US/Pacific'))
     if date.strftime('%m-%d') == bday:
+        await message.channel.send("counted")
         if "happy birthday" in message.content.lower() or "hbd" in message.content.lower:
             await message.add_reaction(str('❤️'))
             if reply == "":
