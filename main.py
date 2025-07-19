@@ -37,7 +37,7 @@ async def on_message(message):
         return
     
     if datetime.today().strftime('%m-%d') == bday:
-        await message.channel.send(f"Thanks! {message.author}")
+        await message.channel.send(f"Thanks! {directory[message.author.id]}")
 
     if secret in message.content.lower():
         await message.delete()
