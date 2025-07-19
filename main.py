@@ -58,10 +58,11 @@ async def on_message(message):
                 if len(pings) == 0:
                     reply += unavailable
                     await message.channel.send("pings 0")
-                elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
-                    reply += unavailable
-                    await message.channel.send("last ping more than 5 minutes ago")
-
+                else:
+                    if message.created_at - pings[-1] > datetime.timedelta(minutes=5):
+                        reply += unavailable
+                        await message.channel.send("last ping more than 5 minutes ago")
+    
             pings.append(message.created_at)
             await message.channel.send("ping added" + str(pings))
             i = 0
