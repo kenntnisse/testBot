@@ -18,7 +18,7 @@ secret = os.getenv('SECRET')
 directory = ast.literal_eval(os.getenv('DIRECTORY'))
 available = os.getenv('AVAILABLE') == True
 owner = ast.literal_eval(os.getenv('OWNER'))
-trigger = ast.literal_eval(os.getenv('TRIGGER'))
+trigger = os.getenv('TRIGGER')
 
 
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
