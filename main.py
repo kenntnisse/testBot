@@ -5,12 +5,14 @@ from dotenv import load_dotenv
 import os
 import webserver 
 from datetime import datetime
-
+import ast
 load_dotenv()
 
 token = os.getenv('DISCORD_TOKEN')
 bday = os.getenv('BDAY')
 secret = os.getenv('SECRET')
+directory = ast.literal_eval(os.getenv('DIRECTORY'))
+available = os.getenv('AVAILABLE') == True
 
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
@@ -40,6 +42,9 @@ async def on_message(message):
     if secret in message.content.lower():
         await message.delete()
         await message.channel.send(f"{message.author.mention} counted!")
+
+    if "@kitherain_29768" in message.content.lower():
+        await message.channel.send(f"pinged{message.author}")
 
 
     await bot.process_commands(message)
