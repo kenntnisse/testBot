@@ -54,8 +54,7 @@ async def on_message(message):
     for line in lines:
         pings.append(datetime.datetime.fromisoformat(line.strip()))
     await message.channel.send(str(pings))
-    fout.close()
-
+    fin.close()
 
     for m in message.mentions:
         if m.id == owner:
