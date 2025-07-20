@@ -49,7 +49,7 @@ async def on_message(message):
     reply = ""
 
     pings = []
-    fin = open("pings.txt", "w+")
+    fin = open("pings.txt", "r+")
     for line in fin.readlines():
         pings.append(datetime.datetime.fromisoformat(line))
     fin.close()
@@ -63,20 +63,20 @@ async def on_message(message):
                 else:
                     unavailable = "Shunzo's not here right now. "
                 await message.channel.send("not available")
-                #if len(pings) == 0:
-                #    reply += unavailable
-                #    await message.channel.send("pings 0")
-                #elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
-                #    reply += unavailable
-                #    await message.channel.send("last ping more than 5 minutes ago")
-            await message.channel.send("???????")
+                if len(pings) == 0:
+                    reply += unavailable
+                    await message.channel.send("pings 0")
+                elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
+                    reply += unavailable
+                    await message.channel.send("last ping more than 5 minutes ago")
+            await message.channel.send("???????"+str(pings))
             pings.append(message.created_at)
-            await message.channel.send("ping added")
+            await message.channel.send("ping added"+str(pings))
             i = 0
             while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                 i += 1
             pings = pings[i:]
-            message.channel.send("kkjkj")
+            message.channel.send(str(pings))
             if len(pings) == 3:
                 await message.channel.send("Spam identifier activated...")
             elif len(pings) == 6:
@@ -86,7 +86,7 @@ async def on_message(message):
             elif len(pings) == 50:
                 await message.channel.send("Ok, that's impressive.")
             break
-    fout = open("pings.txt", "r+")
+    fout = open("pings.txt", "w+")
     fout.write("\n".join(pings))
     fout.close()
 
