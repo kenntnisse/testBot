@@ -141,6 +141,12 @@ async def on_message(message):
 async def hello(ctx):
     await ctx.send(f"Hello {ctx.author.mention}!")
 
+@bot.command()
+async def clear(ctx):
+    with open("pings.txt", "w") as fout:
+        fout.write("")
+    await ctx.send("spam cleared")
+
 
 webserver.keep_alive()
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
