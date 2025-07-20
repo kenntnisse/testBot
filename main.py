@@ -79,7 +79,7 @@ async def on_message(message):
 
                 while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                     i += 1
-                pings = pings[i+1:]
+                pings = pings[i:]
 
                 if len(pings) == 3:
                     await message.channel.send("Spam identifier activated...")
