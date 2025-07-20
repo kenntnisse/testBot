@@ -51,8 +51,10 @@ async def on_message(message):
     pings = []
     fin = open("pings.txt", "r+")
     for line in fin.readlines():
+        message.channel.send(line)
         pings.append(datetime.datetime.fromisoformat(line))
     fin.close()
+
     message.channel.send(str(pings))
     for m in message.mentions:
         if m.id == owner:
