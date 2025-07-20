@@ -47,54 +47,56 @@ async def on_message(message):
 
 
     reply = ""
-    fin = open("pings.txt", "r+")
     pings = []
-    lines = fin.readlines()
-    for line in lines:
-        pings.append(datetime.datetime.fromisoformat(line.strip()))
-    fin.close()
 
-    for m in message.mentions:
-        if m.id == owner:
-            if not available:
-                unavailable = "I don't think he's available right now. "
-                if (random.randint(0, 2) == 1):
-                    unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
-                else:
-                    unavailable = "Shunzo's not here right now. "
-                if len(pings) == 0:
-                    reply += unavailable
-                    await message.channel.send("pings 0")
-                elif len(pings) == 1:
-                    reply+= "I told you he's busy rn. "
-                elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
-                    reply += unavailable
-                    await message.channel.send("last ping more than 5 minutes ago")
+    with open("pings.txt", "r+") as f:
+        lines = f.readlines()
+        for line in lines:
+            pings.append(datetime.datetime.fromisoformat(line.strip()))
+        f.seek(0)
+        
 
-            pings.append(message.created_at)
-            i = 0
 
-            while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
-                i += 1
-            pings = pings[i+1:]
+        for m in message.mentions:
+            if m.id == owner:
+                if not available:
+                    unavailable = "I don't think he's available right now. "
+                    if (random.randint(0, 2) == 1):
+                        unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
+                    else:
+                        unavailable = "Shunzo's not here right now. "
+                    if len(pings) == 0:
+                        reply += unavailable
+                        await message.channel.send("pings 0")
+                    elif len(pings) == 1:
+                        reply+= "I told you he's busy rn. "
+                    elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
+                        reply += unavailable
+                        await message.channel.send("last ping more than 5 minutes ago")
 
-            if len(pings) == 3:
-                await message.channel.send("Spam identifier activated...")
-            elif len(pings) == 6:
-                await message.channel.send("Hey, that's spam, right? Stop that.")
-            elif len(pings) == 10:
-                await message.channel.send("Quit it.")
-            elif len(pings) == 50:
-                await message.channel.send("Ok, that's impressive.")
-            break
-    
-    fout = open("pings.txt", "w")
-    toWrite = ""
-    for d in pings:
-        toWrite += d.isoformat() +  "\n"
-    toWrite.strip()
-    fout.write(toWrite)
-    fout.close()
+                pings.append(message.created_at)
+                i = 0
+
+                while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
+                    i += 1
+                pings = pings[i+1:]
+
+                if len(pings) == 3:
+                    await message.channel.send("Spam identifier activated...")
+                elif len(pings) == 6:
+                    await message.channel.send("Hey, that's spam, right? Stop that.")
+                elif len(pings) == 10:
+                    await message.channel.send("Quit it.")
+                elif len(pings) == 50:
+                    await message.channel.send("Ok, that's impressive.")
+                break
+        
+        toWrite = ""
+        for d in pings:
+            toWrite += d.isoformat() +  "\n"
+        toWrite.strip()
+        f.write(toWrite)
+        f.truncate()
 
     date = datetime.datetime.now(tz=utc)
     date = date.astimezone(timezone('US/Pacific'))
