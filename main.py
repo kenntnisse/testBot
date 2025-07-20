@@ -50,10 +50,8 @@ async def on_message(message):
     fin = open("pings.txt", "r+")
     pings = []
     lines = fin.readlines()
-    await message.channel.send(lines)
     for line in lines:
         pings.append(datetime.datetime.fromisoformat(line.strip()))
-    await message.channel.send(str(pings))
     fin.close()
 
     for m in message.mentions:
@@ -67,13 +65,14 @@ async def on_message(message):
                 if len(pings) == 0:
                     reply += unavailable
                     await message.channel.send("pings 0")
+                elif len(pings) == 1:
+                    reply+= "I told you he's busy rn. "
                 elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
                     reply += unavailable
                     await message.channel.send("last ping more than 5 minutes ago")
 
             pings.append(message.created_at)
             i = 0
-            await message.channel.send(str(pings))
 
             while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                 i += 1
