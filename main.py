@@ -54,10 +54,11 @@ async def on_message(message):
         for line in lines:
             pings.append(datetime.datetime.fromisoformat(line.strip()))
         f.seek(0)
-        await message.channel.send(str(lines))
 
 
         for m in message.mentions:
+            if m.id == bot.user.id:
+                await message.channel.send("What did you think would happen if you pinged me? Like *really*?")
             if m.id == owner:
                 if not available:
                     unavailable = "I don't think he's available right now. "
@@ -82,21 +83,20 @@ async def on_message(message):
                 pings = pings[i:]
 
                 if len(pings) == 3:
-                    await message.channel.send("Spam identifier activated...")
+                    await message.channel.send("... Just so you know, I don't like spam.")
                 elif len(pings) == 6:
                     await message.channel.send("Hey, that's spam, right? Stop that.")
                 elif len(pings) == 10:
                     await message.channel.send("Quit it.")
                 elif len(pings) == 50:
                     await message.channel.send("Ok, that's impressive.")
-                break
+                
         
         toWrite = ""
         for d in pings:
             toWrite += d.isoformat() +  "\n"
         toWrite.strip()
         f.write(toWrite)
-        await message.channel.send(toWrite)
         f.truncate()
 
     date = datetime.datetime.now(tz=utc)
