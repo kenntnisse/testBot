@@ -47,7 +47,6 @@ async def on_message(message):
 
 
     reply = ""
-    await message.channel.send("message received")
     
     with open("pings.txt", "w+") as fin:
         pings = []
@@ -62,7 +61,6 @@ async def on_message(message):
                         unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
                     else:
                         unavailable = "Shunzo's not here right now. "
-                    await message.channel.send("not available")
                     if len(pings) == 0:
                         reply += unavailable
                         await message.channel.send("pings 0")
@@ -72,6 +70,8 @@ async def on_message(message):
 
                 pings.append(message.created_at)
                 i = 0
+                await message.channel.send(str(pings))
+
                 while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                     i += 1
                 pings = pings[i:]
