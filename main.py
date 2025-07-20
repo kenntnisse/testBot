@@ -55,9 +55,9 @@ async def on_message(message):
                 else:
                     unavailable = "Shunzo's not here right now. "
                 await message.channel.send("not available")
-                if len(pings) == 0:
-                    reply += unavailable
-                    await message.channel.send("pings 0")
+                #if len(pings) == 0:
+                #    reply += unavailable
+                #    await message.channel.send("pings 0")
                 #elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
                 #    reply += unavailable
                 #    await message.channel.send("last ping more than 5 minutes ago")
