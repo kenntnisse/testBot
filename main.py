@@ -73,18 +73,18 @@ async def on_message(message):
                         unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
                     else:
                         unavailable = "Shunzo's not here right now. "
-                    if len(pings) == 0:
+                    if len(pings) == 1:
                         reply += unavailable
-                    elif len(pings) == 1:
-                        reply+= "I told you he's busy rn. "
                     elif len(pings) == 2:
+                        reply+= "I told you he's busy rn. "
+                    elif len(pings) == 3:
                         reply += "The first two times didn't work, why would this one?"
                     elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
                         reply += unavailable
 
 
 
-                if len(pings) == 3:
+                if len(pings) == 4:
                     await message.channel.send("... Just so you know, I don't like spam.")
                 elif len(pings) == 6:
                     await message.channel.send("Hey, that's spam, right? Stop that.")
