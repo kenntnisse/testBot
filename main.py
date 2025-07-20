@@ -60,6 +60,13 @@ async def on_message(message):
             if m.id == bot.user.id:
                 await message.channel.send("What did you think would happen if you pinged me? Like *really*?")
             if m.id == owner:
+                pings.append(message.created_at)
+                i = 0
+
+                while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
+                    i += 1
+                pings = pings[i:]
+
                 if not available:
                     unavailable = "I don't think he's available right now. "
                     if (random.randint(0, 2) == 1):
@@ -70,15 +77,12 @@ async def on_message(message):
                         reply += unavailable
                     elif len(pings) == 1:
                         reply+= "I told you he's busy rn. "
+                    elif len(pings) == 2:
+                        reply += "The first two times didn't work, why would this one?"
                     elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
                         reply += unavailable
 
-                pings.append(message.created_at)
-                i = 0
 
-                while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
-                    i += 1
-                pings = pings[i:]
 
                 if len(pings) == 3:
                     await message.channel.send("... Just so you know, I don't like spam.")
