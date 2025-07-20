@@ -47,51 +47,57 @@ async def on_message(message):
 
 
     reply = ""
+    fin = open("pings.txt", "r+")
+    pings = []
+    lines = fin.readlines()
+    await message.channel.send(lines)
+    for line in lines:
+        pings.append(datetime.datetime.fromisoformat(line.strip()))
+    await message.channel.send(str(pings))
+    fout.close()
+
+
+    for m in message.mentions:
+        if m.id == owner:
+            if not available:
+                unavailable = "I don't think he's available right now. "
+                if (random.randint(0, 2) == 1):
+                    unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
+                else:
+                    unavailable = "Shunzo's not here right now. "
+                if len(pings) == 0:
+                    reply += unavailable
+                    await message.channel.send("pings 0")
+                elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
+                    reply += unavailable
+                    await message.channel.send("last ping more than 5 minutes ago")
+
+            pings.append(message.created_at)
+            i = 0
+            await message.channel.send(str(pings))
+
+            while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
+                i += 1
+            pings = pings[i:]
+            await message.channel.send(str(pings))
+            if len(pings) == 3:
+                await message.channel.send("Spam identifier activated...")
+            elif len(pings) == 6:
+                await message.channel.send("Hey, that's spam, right? Stop that.")
+            elif len(pings) == 10:
+                await message.channel.send("Quit it.")
+            elif len(pings) == 50:
+                await message.channel.send("Ok, that's impressive.")
+            break
     
-    with open("pings.txt", "w+") as fin:
-        pings = []
-        for line in fin.readlines():
-            pings.append(datetime.datetime.fromisoformat(line.strip()))
-
-        for m in message.mentions:
-            if m.id == owner:
-                if not available:
-                    unavailable = "I don't think he's available right now. "
-                    if (random.randint(0, 2) == 1):
-                        unavailable += "Try texting him. I'd give it a 50/50 of working, but then I heard you gacha players like that. "
-                    else:
-                        unavailable = "Shunzo's not here right now. "
-                    if len(pings) == 0:
-                        reply += unavailable
-                        await message.channel.send("pings 0")
-                    elif message.created_at - pings[-1] > datetime.timedelta(minutes=5):
-                        reply += unavailable
-                        await message.channel.send("last ping more than 5 minutes ago")
-
-                pings.append(message.created_at)
-                i = 0
-                await message.channel.send(str(pings))
-
-                while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
-                    i += 1
-                pings = pings[i:]
-                await message.channel.send(str(pings))
-                if len(pings) == 3:
-                    await message.channel.send("Spam identifier activated...")
-                elif len(pings) == 6:
-                    await message.channel.send("Hey, that's spam, right? Stop that.")
-                elif len(pings) == 10:
-                    await message.channel.send("Quit it.")
-                elif len(pings) == 50:
-                    await message.channel.send("Ok, that's impressive.")
-                break
-    
-        toWrite = ""
-        for d in pings:
-            toWrite += d.isoformat() +  "\n"
-        toWrite.strip()
-        fin.write(toWrite)
-        await message.channel.send(toWrite)
+    fout = open("pings.txt", "w")
+    toWrite = ""
+    for d in pings:
+        toWrite += d.isoformat() +  "\n"
+    toWrite.strip()
+    fout.write(toWrite)
+    await message.channel.send(toWrite)
+    fout.close()
 
     date = datetime.datetime.now(tz=utc)
     date = date.astimezone(timezone('US/Pacific'))
