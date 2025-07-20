@@ -94,7 +94,6 @@ async def on_message(message):
         toWrite += d.isoformat() +  "\n"
     toWrite.strip()
     fout.write(toWrite)
-    await message.channel.send(toWrite)
     fout.close()
 
     date = datetime.datetime.now(tz=utc)
