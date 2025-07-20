@@ -133,8 +133,9 @@ async def on_message(message):
         await message.delete()
         await message.channel.send(f"{message.author.mention} counted!")
 
+    if reply != "":
+        await message.channel.send(reply)
 
-    await message.channel.send(reply)
     await bot.process_commands(message)
 
 @bot.command()
