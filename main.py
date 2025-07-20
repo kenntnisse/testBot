@@ -51,11 +51,10 @@ async def on_message(message):
     pings = []
     fin = open("pings.txt", "r+")
     for line in fin.readlines():
-        message.channel.send(line)
         pings.append(datetime.datetime.fromisoformat(line))
     fin.close()
 
-    message.channel.send(str(pings))
+    await message.channel.send(str(pings))
     for m in message.mentions:
         if m.id == owner:
             if not available:
@@ -78,7 +77,7 @@ async def on_message(message):
             while i < len(pings) and message.created_at - pings[i] > datetime.timedelta(minutes=5):
                 i += 1
             pings = pings[i:]
-            message.channel.send(str(pings))
+            await message.channel.send(str(pings))
             if len(pings) == 3:
                 await message.channel.send("Spam identifier activated...")
             elif len(pings) == 6:
