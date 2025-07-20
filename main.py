@@ -54,7 +54,7 @@ async def on_message(message):
         for line in lines:
             pings.append(datetime.datetime.fromisoformat(line.strip()))
         f.seek(0)
-        
+        await message.channel.send(str(lines))
 
 
         for m in message.mentions:
@@ -96,6 +96,7 @@ async def on_message(message):
             toWrite += d.isoformat() +  "\n"
         toWrite.strip()
         f.write(toWrite)
+        await message.channel.send(toWrite)
         f.truncate()
 
     date = datetime.datetime.now(tz=utc)
