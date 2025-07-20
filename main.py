@@ -31,7 +31,6 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='/', intents = intents)
 
-pings = []
 
 
 
@@ -45,7 +44,16 @@ async def on_message(message):
     if message.author == bot.user:
         return
     
+
+
     reply = ""
+
+    pings = []
+    fin = open("pings.txt", "w+")
+    for line in fin.readlines():
+        pings.append(datetime.datetime.fromisoformat(line))
+    fin.close()
+
     for m in message.mentions:
         if m.id == owner:
             if not available:
@@ -78,7 +86,9 @@ async def on_message(message):
             elif len(pings) == 50:
                 await message.channel.send("Ok, that's impressive.")
             break
-
+    fout = open("pings.txt", "r+")
+    fout.write("\n".join(pings))
+    fout.close()
 
     date = datetime.datetime.now(tz=utc)
     date = date.astimezone(timezone('US/Pacific'))
