@@ -53,7 +53,7 @@ async def on_message(message):
     for line in fin.readlines():
         pings.append(datetime.datetime.fromisoformat(line))
     fin.close()
-
+    message.channel.send(str(pings))
     for m in message.mentions:
         if m.id == owner:
             if not available:
@@ -86,8 +86,13 @@ async def on_message(message):
             elif len(pings) == 50:
                 await message.channel.send("Ok, that's impressive.")
             break
+    
     fout = open("pings.txt", "w+")
-    fout.write("\n".join(pings))
+    toWrite = ""
+    for d in pings:
+        toWrite += d.isoformat() +  "\n"
+    toWrite.strip()
+    fout.write(toWrite)
     fout.close()
 
     date = datetime.datetime.now(tz=utc)
